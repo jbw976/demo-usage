@@ -1,0 +1,20 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xdatabasewithusers.example.io
+spec:
+  group: example.io
+  names:
+    kind: XDatabaseWithUser
+    plural: xdatabasewithusers
+  claimNames:
+    kind: DatabaseWithUser
+    plural: databasewithusers
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+     openAPIV3Schema:
+       type: object
+       properties: {}

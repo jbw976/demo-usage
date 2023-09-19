@@ -1,0 +1,6 @@
+apiVersion: example.io/v1alpha1
+kind: DatabaseWithUser
+metadata:
+  namespace: default
+  name: example-user
+spec: {}

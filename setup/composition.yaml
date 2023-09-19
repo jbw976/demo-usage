@@ -1,0 +1,51 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: xdatabasewithuser.example.io
+spec:
+  compositeTypeRef:
+    apiVersion: example.io/v1alpha1
+    kind: XDatabaseWithUser
+  resources:
+  - name: database-server
+    base:
+      apiVersion: example.io/v1alpha1
+      kind: XDatabaseServer
+      spec:
+        version: "13.1.3"
+  - name: database-user
+    base:
+      apiVersion: mysql.sql.crossplane.io/v1alpha1
+      kind: User
+      spec:
+        writeConnectionSecretToRef:
+          name: example-user-connection
+          namespace: default # patch claim namespace here
+        forProvider:
+          resourceOptions:
+            maxQueriesPerHour: 1000
+            maxUpdatesPerHour: 1000
+            maxConnectionsPerHour: 100
+            maxUserConnections: 10
+    patches:
+      - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+        toFieldPath: metadata.annotations[crossplane.io/external-name]
+      - fromFieldPath: metadata.labels[crossplane.io/claim-name]
+        toFieldPath: spec.providerConfigRef.name
+      - fromFieldPath: metadata.labels[crossplane.io/claim-namespace]
+        toFieldPath: spec.writeConnectionSecretToRef.namespace
+  - name: database-user-uses-server
+    base:
+      apiVersion: apiextensions.crossplane.io/v1alpha1
+      kind: Usage
+      spec:
+        of:
+          apiVersion: example.io/v1alpha1
+          kind: XDatabaseServer
+          resourceSelector:
+            matchControllerRef: true
+        by:
+          apiVersion: mysql.sql.crossplane.io/v1alpha1
+          kind: User
+          resourceSelector:
+            matchControllerRef: true
