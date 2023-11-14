@@ -11,7 +11,7 @@ deletions are processed for resources that are part of the same composite/claim.
 
 ## Steps
 
-1. Run `./setup.sh` which will take care of the following:
+1. Run `./setup.sh` which will take care of the below, the end result is visualized in [arch.png](./arch.png):
    1. Installs UXP with the Usage API enabled, e.g. `--enable-usages`
    2. Applies the manifests under `setup` directory which install the required providers
    as well as the `Compositions` and `CompositeResourceDefinitions` including the one that we just modified.
