@@ -17,7 +17,12 @@ deletions are processed for resources that are part of the same composite/claim.
    as well as the `Compositions` and `CompositeResourceDefinitions` including the one that we just modified.
    3. Configures the `provider-kubernetes` and `provider-helm` to work within the same Kubernetes cluster.
 
-2. Create the claim with `kubectl apply -f claim.yaml` and wait for the resources to become ready (e.g., `kubectl get managed`)
+2. Create the claim with `kubectl apply -f claim.yaml` and wait for the resources to become ready
+
+```bash
+❯ kubectl get managed
+❯ crossplane beta trace databasewithuser.example.io/example-user
+```
 
 3. Check the `Usage` resource that is created as part of the claim:
 

@@ -1,0 +1,24 @@
+# set up cluster and database platform resources
+kind create cluster
+./setup.sh
+
+# create a database instance w/ user claim
+kubectl apply -f claim.yaml
+
+# wait for all resources to become ready
+crossplane beta trace databasewithuser.example.io/example-user
+kubectl get managed
+
+# show the usage tracking
+kubectl get usages
+
+# deletion of database should be blocked
+kubectl delete XDatabaseServer --all
+
+# delete claim and let ordered deletion clean up smoothly
+kubectl delete -f claim.yaml
+crossplane beta trace databasewithuser.example.io/example-user
+kubectl get managed
+
+# clean up cluster
+kind delete cluster
